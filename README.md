@@ -1,1 +1,1 @@
-# HEIC-to-PNG
+# Desktop Image Converter
