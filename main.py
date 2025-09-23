@@ -8,7 +8,7 @@ import os
 VALID_EXTS = (".png", ".jpg", ".jpeg", ".gif", ".bmp")
 FONT = "Thonburi"
 current_img = None
-display_image = None
+preview_img = None
 
 
 def browse_file(event=None):
@@ -21,12 +21,12 @@ def browse_file(event=None):
     display_image()
 
 def display_image():
-    global display_image
-    display_image = current_img.copy()
-    display_image.thumbnail((200,200))
-    display_image = ImageTk.PhotoImage(display_image)
+    global preview_img
+    preview_img = current_img.copy()
+    preview_img.thumbnail((200,200))
+    preview_img = ImageTk.PhotoImage(preview_img)
 
-    drop_label.config(image=display_image, text="")
+    drop_label.config(image=preview_img, text="")
 
 root = TkinterDnD.Tk()
 root.geometry("600x400")
