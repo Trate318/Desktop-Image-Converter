@@ -12,7 +12,7 @@ FILE_TYPE_DICT = {
     'jpeg' : 'JPEG',
     'jpg' : 'JPEG',
     'png' : 'PNG',
-    'heic' : 'HEIC',
+    'heic' : 'HEIF',
     'heif' : 'HEIF',
 }
 
@@ -21,8 +21,6 @@ TEXT_COLOR = "#000000"
 
 current_img : Image = None
 preview_img : Image = None
-
-file_type : str = "png"
 
 def browse_file(event=None):
     global current_img
@@ -55,12 +53,16 @@ def display_image_name(filename):
     filename_input_text.insert(0, filename_no_ext)
 
 def download_image(event=None):
-    global current_img
-    new_filename = filename_input_text.get()
-    downloads_path = os.path.expanduser("~/Downloads")
-    if new_filename:
-        convert(current_img)
-        current_img.save(os.path.join(downloads_path, f"{new_filename}.{file_type}"), format='PNG')
+    if current_img:
+        new_filename = filename_input_text.get()
+        downloads_path = os.path.expanduser("~/Downloads")
+        if new_filename:
+            convert(current_img)
+            current_img.save(os.path.join(downloads_path, f"{new_filename}.{selected_type.get()}"), format=FILE_TYPE_DICT[selected_type.get()])
+
+def copy_image_to_clipboard(event=None):
+    if current_img:
+        pass
 
 def convert(image : Image):
    if image.format == 'PNG':
@@ -106,15 +108,50 @@ filename_input_text = tk.Entry(
     readonlybackground="#A1D8B5",
 )
 
-select_file_type_label = tk.Label(
-    input_buttons_frame, 
-    width=200, 
-    height=40, 
-    bg="#4CB572",
-    text="Select Type",
+# select_file_type_label = tk.Label(
+#     input_buttons_frame, 
+#     width=200, 
+#     height=40, 
+#     bg="#4CB572",
+#     text="Select Type",
+#     font=(FONT, 13),
+#     fg=TEXT_COLOR,
+#     )
+
+# --------
+from tkinter import ttk
+
+selected_type = tk.StringVar(value="Select Type")
+
+select_file_type_dropdown = ttk.Combobox(
+    input_buttons_frame,
+    textvariable=selected_type,
+    values=["Select Type"] + list(FILE_TYPE_DICT.keys()),
+    state="readonly",
     font=(FONT, 13),
-    fg=TEXT_COLOR,
-    )
+    style='TCombobox',
+    justify='center'
+)
+
+# Create a custom style
+style = ttk.Style()
+style.theme_use('default')
+
+style.configure(
+    'TCombobox',
+    fieldbackground="#4CB572",
+    background="#4CB572",
+    foreground=TEXT_COLOR,
+    arrowcolor=TEXT_COLOR,
+    borderwidth=0,
+    relief="flat"
+)
+
+style.map('TCombobox',
+    fieldbackground=[('readonly', '#4CB572')],
+    selectbackground=[('readonly', '#4CB572')],
+    selectforeground=[('readonly', TEXT_COLOR)]
+)
 
 
 output_buttons_frame = tk.Frame(root, width=450, height=40, bg="#e6ebe9")
@@ -144,7 +181,7 @@ drop_label.pack(expand=True, fill="both")
 filename_input_text.place(x=0, y=0, width=320, height=40)
 copy_label.place(x=230, y=0, width=220, height= 40)
 download_label.place(x=0, y=0, width=220, height= 40)
-select_file_type_label.place(x=0, y=0, width=120, height=40)
+select_file_type_dropdown.place(x=0, y=0, width=120, height=40)
 
 
 canvas.create_window(75, 40, anchor="nw", window=input_frame)
@@ -168,7 +205,7 @@ def center_window(window, width=300, height=200):
     y = (screen_height - height) // 2
     window.geometry(f"{width}x{height}+{x}+{y}")
 
-# temp hides it so it doesn't flash top left
+# temp hidden so it doesn't flash top left
 root.withdraw()
 center_window(root, 600, 420)
 root.deiconify() 
