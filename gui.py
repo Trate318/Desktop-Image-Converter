@@ -114,7 +114,7 @@ class gui:
             width=95,
             height=40,
             bg="#4CB572",
-            text="Copy",
+            text="Copy to Clipboard",
             font=(self.FONT, 13),
             fg=self.TEXT_COLOR
         )
@@ -161,4 +161,4 @@ class gui:
         self.filename_input_text.delete(0, tk.END)
         filename_no_ext = os.path.splitext(filename)[0]
         self.filename_input_text.insert(0, filename_no_ext)
-        self.filename_input_text.config(state='readonly')
+        self.filename_input_text.config(state='normal')

@@ -1,7 +1,10 @@
+import io
+import os
+import sys
 from PIL import Image
 import pillow_heif
-import os
 from tkinter import filedialog
+import pyperclipimg
 
 pillow_heif.register_heif_opener()
 
@@ -54,4 +57,4 @@ class core:
 
     def copy_image_to_clipboard(self, event=None):
         if self.current_img:
-            pass
+            pyperclipimg.copy(self.current_img)
