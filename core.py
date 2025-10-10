@@ -58,3 +58,11 @@ class core:
     def copy_image_to_clipboard(self, event=None):
         if self.current_img:
             pyperclipimg.copy(self.current_img)
+
+    def paste_image_from_clipboard(self, event=None):
+        img = pyperclipimg.paste()
+        if img:
+            self.current_img = img
+            self.gui.display_image_name('image')
+            self.gui.display_image(self.current_img)
+        pass
